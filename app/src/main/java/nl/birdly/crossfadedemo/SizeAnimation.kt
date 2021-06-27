@@ -112,27 +112,22 @@ fun SizeAnimation(
                                     1f
                                 )
 
-                                val immutableStartWidth = minSize?.width?.toInt()
-                                val immutableEndWidth = maxSize?.width?.toInt()
-                                if (immutableStartWidth != null && immutableEndWidth != null) {
-                                    scaleX = calculateScale(
-                                        sizeAnimationItem.key,
-                                        immutableStartWidth,
-                                        immutableEndWidth,
-                                        animationProgress
-                                    )
-                                }
+                                // minSize and maxSize cannot be null at this point
+                                val minSize = minSize ?: return@placeRelativeWithLayer
+                                val maxSize = maxSize ?: return@placeRelativeWithLayer
+                                scaleX = calculateScale(
+                                    sizeAnimationItem.key,
+                                    minSize.width.toInt(),
+                                    maxSize.width.toInt(),
+                                    animationProgress
+                                )
 
-                                val immutableStartHeight = minSize?.height?.toInt()
-                                val immutableEndHeight = maxSize?.height?.toInt()
-                                if (immutableStartHeight != null && immutableEndHeight != null) {
-                                    scaleY = calculateScale(
-                                        sizeAnimationItem.key,
-                                        immutableStartHeight,
-                                        immutableEndHeight,
-                                        animationProgress
-                                    )
-                                }
+                                scaleY = calculateScale(
+                                    sizeAnimationItem.key,
+                                    minSize.height.toInt(),
+                                    maxSize.height.toInt(),
+                                    animationProgress
+                                )
                             }
                         }
                     }
