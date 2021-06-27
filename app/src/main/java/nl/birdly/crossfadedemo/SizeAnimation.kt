@@ -117,15 +117,15 @@ fun SizeAnimation(
                                 val maxSize = maxSize ?: return@placeRelativeWithLayer
                                 scaleX = calculateScale(
                                     sizeAnimationItem.key,
-                                    minSize.width.toInt(),
-                                    maxSize.width.toInt(),
+                                    minSize.width,
+                                    maxSize.width,
                                     animationProgress
                                 )
 
                                 scaleY = calculateScale(
                                     sizeAnimationItem.key,
-                                    minSize.height.toInt(),
-                                    maxSize.height.toInt(),
+                                    minSize.height,
+                                    maxSize.height,
                                     animationProgress
                                 )
                             }
@@ -139,17 +139,17 @@ fun SizeAnimation(
 
 private fun calculateScale(
     sizeState: SizeState,
-    startSize: Int,
-    endSize: Int,
+    startSize: Float,
+    endSize: Float,
     animationProgress: Float
     ): Float {
     return when (sizeState) {
         SizeState.END -> {
-            val calculation = startSize.toFloat() / endSize.toFloat()
+            val calculation = startSize / endSize
             calculation + (1F - calculation) * animationProgress
         }
         SizeState.START -> {
-            val calculation = endSize.toFloat() / startSize.toFloat()
+            val calculation = endSize / startSize
             calculation - (calculation - 1) * (1F - animationProgress)
         }
     }
