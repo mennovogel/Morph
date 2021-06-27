@@ -16,6 +16,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.layout.Layout
 
@@ -35,10 +36,8 @@ fun SizeAnimation(
         }
     }, animationSpec)
 
-    var startWidth by remember { mutableStateOf<Int?>(null) }
-    var endWidth by remember { mutableStateOf<Int?>(null) }
-    var startHeight by remember { mutableStateOf<Int?>(null) }
-    var endHeight by remember { mutableStateOf<Int?>(null) }
+    var minSize by remember { mutableStateOf<Size?>(null) }
+    var maxSize by remember { mutableStateOf<Size?>(null) }
 
     val items = remember { mutableStateListOf<SizeAnimationItem>() }
     val transitionState = remember { MutableTransitionState(targetState) }
@@ -88,10 +87,13 @@ fun SizeAnimation(
                     val currentWidth: Int = placeables.map { it.width }.maxOrNull() ?: 0
                     val currentHeight = placeables.map { it.height }.maxOrNull() ?: 0
 
-                    if (startWidth == null || currentWidth < startWidth!!) startWidth = currentWidth
-                    if (endWidth == null || currentWidth > endWidth!!) endWidth = currentWidth
-                    if (startHeight == null || currentHeight < startHeight!!) startHeight = currentHeight
-                    if (endHeight == null || currentHeight > endHeight!!) endHeight = currentHeight
+                    if (minSize == null || currentWidth < minSize?.width!!) {
+                        minSize = Size(currentWidth.toFloat(), currentHeight.toFloat())
+                    }
+
+                    if (maxSize == null || currentWidth > maxSize?.width!!) {
+                        maxSize = Size(currentWidth.toFloat(), currentHeight.toFloat())
+                    }
 
                     // Set the size of the layout as big as it can
                     layout(
@@ -110,8 +112,8 @@ fun SizeAnimation(
                                     1f
                                 )
 
-                                val immutableStartWidth = startWidth
-                                val immutableEndWidth = endWidth
+                                val immutableStartWidth = minSize?.width?.toInt()
+                                val immutableEndWidth = maxSize?.width?.toInt()
                                 if (immutableStartWidth != null && immutableEndWidth != null) {
                                     scaleX = calculateScale(
                                         sizeAnimationItem.key,
@@ -121,8 +123,8 @@ fun SizeAnimation(
                                     )
                                 }
 
-                                val immutableStartHeight = startHeight
-                                val immutableEndHeight = endHeight
+                                val immutableStartHeight = minSize?.height?.toInt()
+                                val immutableEndHeight = maxSize?.height?.toInt()
                                 if (immutableStartHeight != null && immutableEndHeight != null) {
                                     scaleY = calculateScale(
                                         sizeAnimationItem.key,
