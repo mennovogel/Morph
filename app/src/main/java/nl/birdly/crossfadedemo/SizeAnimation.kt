@@ -1,5 +1,6 @@
 package nl.birdly.crossfadedemo
 
+import android.util.Log
 import androidx.compose.animation.core.FiniteAnimationSpec
 import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.animation.core.animateFloat
@@ -26,8 +27,8 @@ fun SizeAnimation(
     targetState: SizeState,
     content: @Composable (SizeState) -> Unit
 ) {
-    var minSize by remember { mutableStateOf<Size?>(null) }
-    var maxSize by remember { mutableStateOf<Size?>(null) }
+    var goToSize by remember { mutableStateOf<Size?>(null) }
+    var previousSize by remember { mutableStateOf<Size?>(null) }
 
     val items = remember { mutableStateListOf<SizeAnimationItem>() }
     val transitionState = remember { MutableTransitionState(targetState) }
@@ -82,12 +83,10 @@ fun SizeAnimation(
                     val currentWidth: Int = placeables.map { it.width }.maxOrNull() ?: 0
                     val currentHeight = placeables.map { it.height }.maxOrNull() ?: 0
 
-                    if (minSize == null || currentWidth < minSize?.width!!) {
-                        minSize = Size(currentWidth.toFloat(), currentHeight.toFloat())
-                    }
-
-                    if (maxSize == null || currentWidth > maxSize?.width!!) {
-                        maxSize = Size(currentWidth.toFloat(), currentHeight.toFloat())
+                    if (sizeAnimationItem.key == targetState) {
+                        goToSize = Size(currentWidth.toFloat(), currentHeight.toFloat())
+                    } else {
+                        previousSize = Size(currentWidth.toFloat(), currentHeight.toFloat())
                     }
 
                     // Set the size of the layout as big as it can
@@ -97,6 +96,8 @@ fun SizeAnimation(
                     ) {
                         // Place children in the parent layout
                         placeables.forEach { placeable ->
+                            val currentSize = Size(placeable.width.toFloat(), placeable.height.toFloat())
+
                             // Position item on the screen
                             placeable.placeRelativeWithLayer(
                                 x = -placeable.width,
@@ -107,19 +108,8 @@ fun SizeAnimation(
                                     1f
                                 )
 
-                                // minSize and maxSize cannot be null at this point
-                                val immutableMinSize = minSize ?: return@placeRelativeWithLayer
-                                val immutableMaxSize = maxSize ?: return@placeRelativeWithLayer
-                                val startSize = if (targetState == SizeState.START) {
-                                    immutableMaxSize
-                                } else {
-                                    immutableMinSize
-                                }
-                                val endSize = if (targetState == SizeState.START) {
-                                    immutableMinSize
-                                } else {
-                                    immutableMaxSize
-                                }
+                                val startSize = previousSize ?: currentSize
+                                val endSize = goToSize ?: currentSize
 
                                 scaleX = calculateScale(
                                     startSize.width,
