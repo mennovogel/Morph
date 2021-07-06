@@ -49,14 +49,11 @@ fun AnimatingFab(modifier: Modifier) {
 
     SizeAnimation(
         modifier = modifier,
-        targetState = when (state) {
-            State.FAB -> SizeState.START
-            State.LIST -> SizeState.END
-        },
+        targetState = state,
         animationSpec = tween(animationDuration)
     ) { sizeState ->
         when (sizeState) {
-            SizeState.START -> {
+            State.FAB -> {
                 FloatingActionButton(
                     elevation = FloatingActionButtonDefaults.elevation(4.dp),
                     backgroundColor = MaterialTheme.colors.secondary,
@@ -69,7 +66,7 @@ fun AnimatingFab(modifier: Modifier) {
                     )
                 }
             }
-            SizeState.END -> {
+            State.LIST -> {
                 Card(
                     elevation = 4.dp,
                     backgroundColor = MaterialTheme.colors.background

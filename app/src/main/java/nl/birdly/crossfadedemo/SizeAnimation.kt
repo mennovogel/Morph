@@ -20,16 +20,16 @@ import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.layout.Layout
 
 @Composable
-fun SizeAnimation(
+fun <T> SizeAnimation(
     modifier: Modifier = Modifier,
     animationSpec: FiniteAnimationSpec<Float> = spring(),
-    targetState: SizeState,
-    content: @Composable (SizeState) -> Unit
+    targetState: T,
+    content: @Composable (T) -> Unit
 ) {
     var goToSize by remember { mutableStateOf<Size?>(null) }
     var previousSize by remember { mutableStateOf<Size?>(null) }
 
-    val items = remember { mutableStateListOf<SizeAnimationItem>() }
+    val items = remember { mutableStateListOf<SizeAnimationItem<T>>() }
     val transitionState = remember { MutableTransitionState(targetState) }
     val targetChanged = (targetState != transitionState.targetState)
     transitionState.targetState = targetState
@@ -147,11 +147,7 @@ private fun calculateScale(
     }
 }
 
-enum class SizeState {
-    START, END
-}
-
-private data class SizeAnimationItem(
-    val key: SizeState,
+private data class SizeAnimationItem<T>(
+    val key: T,
     val content: @Composable () -> Unit
 )
