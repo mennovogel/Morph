@@ -3,7 +3,6 @@ package nl.birdly.crossfadedemo
 import androidx.compose.animation.core.FiniteAnimationSpec
 import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.animation.core.animateFloat
-import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.layout.Box
@@ -27,15 +26,6 @@ fun SizeAnimation(
     targetState: SizeState,
     content: @Composable (SizeState) -> Unit
 ) {
-    val animationProgress by animateFloatAsState(targetValue = when(targetState) {
-        SizeState.START -> {
-            0f
-        }
-        SizeState.END -> {
-            1f
-        }
-    }, animationSpec)
-
     var minSize by remember { mutableStateOf<Size?>(null) }
     var maxSize by remember { mutableStateOf<Size?>(null) }
 
@@ -73,6 +63,11 @@ fun SizeAnimation(
     Box(modifier) {
         items.forEach { sizeAnimationItem ->
             key(sizeAnimationItem.key) {
+
+                val animationProgress by transition.animateFloat(
+                    transitionSpec = { animationSpec }, label = "animationProgress"
+                ) { target -> if (target == sizeAnimationItem.key) 1f else 0f }
+
                 Layout(
                     modifier = Modifier,
                     content = sizeAnimationItem.content
@@ -115,18 +110,29 @@ fun SizeAnimation(
                                 // minSize and maxSize cannot be null at this point
                                 val immutableMinSize = minSize ?: return@placeRelativeWithLayer
                                 val immutableMaxSize = maxSize ?: return@placeRelativeWithLayer
+                                val startSize = if (targetState == SizeState.START) {
+                                    immutableMaxSize
+                                } else {
+                                    immutableMinSize
+                                }
+                                val endSize = if (targetState == SizeState.START) {
+                                    immutableMinSize
+                                } else {
+                                    immutableMaxSize
+                                }
+
                                 scaleX = calculateScale(
-                                    sizeAnimationItem.key,
-                                    immutableMinSize.width,
-                                    immutableMaxSize.width,
-                                    animationProgress
+                                    startSize.width,
+                                    endSize.width,
+                                    animationProgress,
+                                    targetState == sizeAnimationItem.key
                                 )
 
                                 scaleY = calculateScale(
-                                    sizeAnimationItem.key,
-                                    immutableMinSize.height,
-                                    immutableMaxSize.height,
-                                    animationProgress
+                                    startSize.height,
+                                    endSize.height,
+                                    animationProgress,
+                                    targetState == sizeAnimationItem.key
                                 )
                             }
                         }
@@ -138,20 +144,17 @@ fun SizeAnimation(
 }
 
 private fun calculateScale(
-    sizeState: SizeState,
     startSize: Float,
     endSize: Float,
-    animationProgress: Float
-    ): Float {
-    return when (sizeState) {
-        SizeState.END -> {
-            val calculation = startSize / endSize
-            calculation + (1F - calculation) * animationProgress
-        }
-        SizeState.START -> {
-            val calculation = endSize / startSize
-            calculation - (calculation - 1) * (1F - animationProgress)
-        }
+    progress: Float,
+    animateToTarget: Boolean
+): Float {
+    return if (animateToTarget) {
+        val startScale = startSize / endSize
+        startScale + (1F - startScale) * progress
+    } else {
+        val endScale = endSize / startSize
+        endScale - (endScale - 1) * progress
     }
 }
 

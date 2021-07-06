@@ -38,7 +38,7 @@ import androidx.compose.ui.unit.dp
 fun AnimatingFab(modifier: Modifier) {
     var state by remember { mutableStateOf(State.FAB) }
 
-    val animationDuration = 200
+    val animationDuration = 2000
 
     val clickAction: () -> Unit = {
         state = when (state) {
