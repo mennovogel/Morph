@@ -104,8 +104,8 @@ fun SizeAnimation(
                         placeables.forEach { placeable ->
                             // Position item on the screen
                             placeable.placeRelativeWithLayer(
-                                x = 0 - placeable.width,
-                                y = 0 - placeable.height,
+                                x = -placeable.width,
+                                y = -placeable.height,
                             ) {
                                 transformOrigin = TransformOrigin(
                                     1f,
@@ -113,19 +113,19 @@ fun SizeAnimation(
                                 )
 
                                 // minSize and maxSize cannot be null at this point
-                                val minSize = minSize ?: return@placeRelativeWithLayer
-                                val maxSize = maxSize ?: return@placeRelativeWithLayer
+                                val immutableMinSize = minSize ?: return@placeRelativeWithLayer
+                                val immutableMaxSize = maxSize ?: return@placeRelativeWithLayer
                                 scaleX = calculateScale(
                                     sizeAnimationItem.key,
-                                    minSize.width,
-                                    maxSize.width,
+                                    immutableMinSize.width,
+                                    immutableMaxSize.width,
                                     animationProgress
                                 )
 
                                 scaleY = calculateScale(
                                     sizeAnimationItem.key,
-                                    minSize.height,
-                                    maxSize.height,
+                                    immutableMinSize.height,
+                                    immutableMaxSize.height,
                                     animationProgress
                                 )
                             }
