@@ -1,6 +1,5 @@
 package nl.birdly.crossfadedemo
 
-import android.util.Log
 import androidx.compose.animation.core.FiniteAnimationSpec
 import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.animation.core.animateFloat
