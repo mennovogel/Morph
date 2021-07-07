@@ -74,7 +74,7 @@ class MainActivity : AppCompatActivity() {
             }
         )
 
-        Crossfade(targetState = state, modifier = modifier) { crossFadeState ->
+        SizeAnimation(targetState = state, modifier = modifier) { crossFadeState ->
             when (crossFadeState) {
                 State.START -> {
                     Box(modifier = Modifier
