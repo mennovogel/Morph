@@ -65,88 +65,88 @@ fun <T> SizeAnimation(
     }
 
     Box(modifier = modifier.background(Color.Black)) {
-    var boxSize by remember { mutableStateOf<Size?>(null) }
+        var boxSize by remember { mutableStateOf<Size?>(null) }
 
-    items.forEach { sizeAnimationItem ->
-        key(sizeAnimationItem.key) {
+        items.forEach { sizeAnimationItem ->
+            key(sizeAnimationItem.key) {
 
-            val animationProgress by transition.animateFloat(
-                transitionSpec = { animationSpec }, label = "animationProgress"
-            ) { target -> if (target == sizeAnimationItem.key) 1f else 0f }
+                val animationProgress by transition.animateFloat(
+                    transitionSpec = { animationSpec }, label = "animationProgress"
+                ) { target -> if (target == sizeAnimationItem.key) 1f else 0f }
 
-            Layout(
-                modifier = modifier,
-                content = sizeAnimationItem.content
-            ) { measurables: List<Measurable>, constraints: Constraints ->
-                // Don't constrain child views further, measure them with given constraints
-                // List of measured children
-                val placeables = measurables.map { measurable ->
-                    // Measure each children
-                    measurable.measure(constraints)
-                }
-
-                val currentWidth = placeables.map { it.width }.maxOrNull() ?: 0
-                val currentHeight = placeables.map { it.height }.maxOrNull() ?: 0
-
-                if (boxSize == null || items.size == 1) {
-                    boxSize = Size(currentWidth.toFloat(), currentHeight.toFloat())
-                } else {
-                    // boxSize cannot be null here
-                    if (currentWidth.toFloat() > boxSize!!.width) {
-                        boxSize = Size(currentWidth.toFloat(), boxSize!!.height)
+                Layout(
+                    modifier = modifier,
+                    content = sizeAnimationItem.content
+                ) { measurables: List<Measurable>, constraints: Constraints ->
+                    // Don't constrain child views further, measure them with given constraints
+                    // List of measured children
+                    val placeables = measurables.map { measurable ->
+                        // Measure each children
+                        measurable.measure(constraints)
                     }
-                    if (currentHeight.toFloat() > boxSize!!.height) {
-                        boxSize = Size(boxSize!!.width, currentHeight.toFloat())
+
+                    val currentWidth = placeables.map { it.width }.maxOrNull() ?: 0
+                    val currentHeight = placeables.map { it.height }.maxOrNull() ?: 0
+
+                    if (boxSize == null || items.size == 1) {
+                        boxSize = Size(currentWidth.toFloat(), currentHeight.toFloat())
+                    } else {
+                        // boxSize cannot be null here
+                        if (currentWidth.toFloat() > boxSize!!.width) {
+                            boxSize = Size(currentWidth.toFloat(), boxSize!!.height)
+                        }
+                        if (currentHeight.toFloat() > boxSize!!.height) {
+                            boxSize = Size(boxSize!!.width, currentHeight.toFloat())
+                        }
                     }
-                }
 
-                if (sizeAnimationItem.key == targetState) {
-                    goToSize = Size(currentWidth.toFloat(), currentHeight.toFloat())
-                } else {
-                    previousSize = Size(currentWidth.toFloat(), currentHeight.toFloat())
-                }
+                    if (sizeAnimationItem.key == targetState) {
+                        goToSize = Size(currentWidth.toFloat(), currentHeight.toFloat())
+                    } else {
+                        previousSize = Size(currentWidth.toFloat(), currentHeight.toFloat())
+                    }
 
-                layout(
-                    currentWidth,
-                    currentHeight
-                ) {
-                    // Place children in the parent layout
-                    placeables.forEach { placeable ->
-                        val currentSize =
-                            Size(placeable.width.toFloat(), placeable.height.toFloat())
+                    layout(
+                        currentWidth,
+                        currentHeight
+                    ) {
+                        // Place children in the parent layout
+                        placeables.forEach { placeable ->
+                            val currentSize =
+                                Size(placeable.width.toFloat(), placeable.height.toFloat())
 
-                        // Position item on the screen
-                        placeable.placeRelativeWithLayer(
-                            x = boxSize!!.width.toInt() - placeable.width,
-                            y = boxSize!!.height.toInt() - placeable.height,
-                        ) {
-                            transformOrigin = TransformOrigin(
-                                1f,
-                                1f
-                            )
+                            // Position item on the screen
+                            placeable.placeRelativeWithLayer(
+                                x = boxSize!!.width.toInt() - placeable.width,
+                                y = boxSize!!.height.toInt() - placeable.height,
+                            ) {
+                                transformOrigin = TransformOrigin(
+                                    1f,
+                                    1f
+                                )
 
-                            val startSize = previousSize ?: currentSize
-                            val endSize = goToSize ?: currentSize
+                                val startSize = previousSize ?: currentSize
+                                val endSize = goToSize ?: currentSize
 
-                            scaleX = calculateScale(
-                                startSize.width,
-                                endSize.width,
-                                animationProgress,
-                                targetState == sizeAnimationItem.key
-                            )
+                                scaleX = calculateScale(
+                                    startSize.width,
+                                    endSize.width,
+                                    animationProgress,
+                                    targetState == sizeAnimationItem.key
+                                )
 
-                            scaleY = calculateScale(
-                                startSize.height,
-                                endSize.height,
-                                animationProgress,
-                                targetState == sizeAnimationItem.key
-                            )
+                                scaleY = calculateScale(
+                                    startSize.height,
+                                    endSize.height,
+                                    animationProgress,
+                                    targetState == sizeAnimationItem.key
+                                )
+                            }
                         }
                     }
                 }
             }
         }
-    }
     }
 }
 
