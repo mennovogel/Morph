@@ -102,6 +102,7 @@ fun <T> SizeAnimation(
                             boxSize = IntSize(boxSize!!.width, currentHeight)
                         }
                     }
+                    val boxSize = boxSize!!
 
                     if (sizeAnimationItem.key == targetState) {
                         goToSize = IntSize(currentWidth, currentHeight)
@@ -118,11 +119,15 @@ fun <T> SizeAnimation(
                             val currentSize =
                                 IntSize(placeable.width, placeable.height)
 
+                            val alignment = contentAlignment.align(
+                                IntSize(placeable.width, placeable.height),
+                                boxSize,
+                                layoutDirection
+                            )
                             // Position item on the screen
                             placeable.placeRelativeWithLayer(
-//                                contentAlignment.align(boxSize!!.width.toInt(), IntSi)
-                                x = boxSize!!.width - placeable.width,
-                                y = boxSize!!.height - placeable.height,
+                                alignment.x,
+                                alignment.y
                             ) {
                                 transformOrigin = TransformOrigin(
                                     1f,

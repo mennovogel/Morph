@@ -71,7 +71,7 @@ class MainActivity : AppCompatActivity() {
         SizeAnimation(
             targetState = state,
             modifier = modifier,
-            animationSpec = tween(200),
+            animationSpec = tween(2000),
         ) { crossFadeState ->
             when (crossFadeState) {
                 State.START -> {
