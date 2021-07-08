@@ -17,7 +17,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.layout.Layout
@@ -88,35 +87,27 @@ fun <T> SizeAnimation(
                         measurable.measure(constraints)
                     }
 
-                    val currentWidth = placeables.map { it.width }.maxOrNull() ?: 0
-                    val currentHeight = placeables.map { it.height }.maxOrNull() ?: 0
+                    val currentSize = IntSize(
+                        placeables.map { it.width }.maxOrNull() ?: 0,
+                        placeables.map { it.height }.maxOrNull() ?: 0
+                    )
 
-                    if (boxSize == null || items.size == 1) {
-                        boxSize = IntSize(currentWidth, currentHeight)
-                    } else {
-                        // boxSize cannot be null here
-                        if (currentWidth.toFloat() > boxSize!!.width) {
-                            boxSize = IntSize(currentWidth, boxSize!!.height)
-                        }
-                        if (currentHeight.toFloat() > boxSize!!.height) {
-                            boxSize = IntSize(boxSize!!.width, currentHeight)
-                        }
-                    }
+                    boxSize = setBoxSize(boxSize, currentSize, items.size)
                     val boxSize = boxSize!!
 
                     if (sizeAnimationItem.key == targetState) {
-                        goToSize = IntSize(currentWidth, currentHeight)
+                        goToSize = IntSize(currentSize.width, currentSize.height)
                     } else {
-                        previousSize = IntSize(currentWidth, currentHeight)
+                        previousSize = IntSize(currentSize.width, currentSize.height)
                     }
 
                     layout(
-                        currentWidth,
-                        currentHeight
+                        currentSize.width,
+                        currentSize.height
                     ) {
                         // Place children in the parent layout
                         placeables.forEach { placeable ->
-                            val currentSize =
+                            val placeableSize =
                                 IntSize(placeable.width, placeable.height)
 
                             val alignment = contentAlignment.align(
@@ -134,8 +125,8 @@ fun <T> SizeAnimation(
                                     1f
                                 )
 
-                                val startSize = previousSize ?: currentSize
-                                val endSize = goToSize ?: currentSize
+                                val startSize = previousSize ?: placeableSize
+                                val endSize = goToSize ?: placeableSize
 
                                 scaleX = calculateScale(
                                     startSize.width.toFloat(),
@@ -171,6 +162,21 @@ private fun calculateScale(
     } else {
         val endScale = endSize / startSize
         endScale - (endScale - 1) * progress
+    }
+}
+
+private fun setBoxSize(boxSize: IntSize?, currentSize: IntSize, itemCount: Int, ): IntSize {
+    if (boxSize == null || itemCount == 1) {
+        return IntSize(currentSize.width, currentSize.height)
+    } else {
+        // boxSize cannot be null here
+        if (currentSize.width.toFloat() > boxSize.width) {
+            return IntSize(currentSize.width, boxSize.height)
+        }
+        if (currentSize.height.toFloat() > boxSize.height) {
+            return IntSize(boxSize.width, currentSize.height)
+        }
+        return boxSize
     }
 }
 
