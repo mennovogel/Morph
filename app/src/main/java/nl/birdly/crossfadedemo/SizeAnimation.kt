@@ -92,8 +92,7 @@ fun <T> SizeAnimation(
                         placeables.map { it.height }.maxOrNull() ?: 0
                     )
 
-                    boxSize = setBoxSize(boxSize, currentSize, items.size)
-                    val boxSize = boxSize!!
+                    boxSize = calculateBoxSize(boxSize, currentSize, items.size)
 
                     if (sizeAnimationItem.key == targetState) {
                         goToSize = IntSize(currentSize.width, currentSize.height)
@@ -112,7 +111,7 @@ fun <T> SizeAnimation(
 
                             val alignment = contentAlignment.align(
                                 IntSize(placeable.width, placeable.height),
-                                boxSize,
+                                boxSize!!,
                                 layoutDirection
                             )
                             // Position item on the screen
@@ -165,18 +164,19 @@ private fun calculateScale(
     }
 }
 
-private fun setBoxSize(boxSize: IntSize?, currentSize: IntSize, itemCount: Int, ): IntSize {
+private fun calculateBoxSize(boxSize: IntSize?, currentSize: IntSize, itemCount: Int, ): IntSize {
     if (boxSize == null || itemCount == 1) {
         return IntSize(currentSize.width, currentSize.height)
     } else {
+        var mutableBoxSize = boxSize
         // boxSize cannot be null here
         if (currentSize.width.toFloat() > boxSize.width) {
-            return IntSize(currentSize.width, boxSize.height)
+            mutableBoxSize = IntSize(currentSize.width, boxSize.height)
         }
         if (currentSize.height.toFloat() > boxSize.height) {
-            return IntSize(boxSize.width, currentSize.height)
+            return IntSize(mutableBoxSize.width, currentSize.height)
         }
-        return boxSize
+        return mutableBoxSize
     }
 }
 
