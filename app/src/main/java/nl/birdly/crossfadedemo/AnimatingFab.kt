@@ -97,53 +97,6 @@ fun AnimatingFab(modifier: Modifier) {
     }
 }
 
-@Composable
-private fun Fab(modifier: Modifier, onClick: () -> Unit) {
-    FloatingActionButton(
-        elevation = FloatingActionButtonDefaults.elevation(4.dp),
-        backgroundColor = MaterialTheme.colors.secondary,
-        modifier = modifier
-            .width(56.dp)
-            .height(56.dp),
-        onClick = onClick
-    ) {
-        Image(
-            painter = painterResource(id = R.drawable.ic_baseline_add_24),
-            contentScale = ContentScale.Inside,
-            contentDescription = "Add"
-        )
-    }
-}
-
-@Composable
-private fun List(modifier: Modifier, onClick: () -> Unit) {
-    Card(
-        elevation = 4.dp,
-        backgroundColor = MaterialTheme.colors.background,
-        modifier = modifier,
-        shape = RoundedCornerShape(4.dp),
-    ) {
-        val listItems = listOf("Option 1", "Option 2", "Option 3")
-
-        LazyColumn(modifier = Modifier
-            .width(200.dp)
-        ) {
-            items(listItems, itemContent = { item ->
-                Box(
-                    modifier
-                        .clickable(onClick = onClick)
-                        .fillMaxWidth()
-                ) {
-                    Text(item, modifier = Modifier
-                        .align(Alignment.Center)
-                        .padding(16.dp)
-                    )
-                }
-            })
-        }
-    }
-}
-
 private enum class State {
     FAB, LIST
 }
