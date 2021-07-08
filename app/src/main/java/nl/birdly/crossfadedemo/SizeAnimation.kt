@@ -1,5 +1,6 @@
 package nl.birdly.crossfadedemo
 
+import android.util.Log
 import androidx.compose.animation.core.FiniteAnimationSpec
 import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.animation.core.animateFloat
@@ -66,7 +67,7 @@ fun <T> SizeAnimation(
         items.removeAll { it.key != transitionState.targetState }
     }
 
-    Box(modifier = modifier.background(Color.Black)) {
+    Box(modifier = modifier) {
         var boxSize by remember { mutableStateOf(IntSize(0, 0)) }
 
         items.forEach { sizeAnimationItem ->
@@ -119,9 +120,15 @@ fun <T> SizeAnimation(
                                 alignment.x,
                                 alignment.y
                             ) {
+                                // Do a dummy alignment, use this to calculate the pivot points
+                                val pivotAlignment = contentAlignment.align(
+                                    IntSize(0, 0),
+                                    IntSize(100, 100),
+                                    layoutDirection
+                                )
                                 transformOrigin = TransformOrigin(
-                                    1f,
-                                    1f
+                                    pivotAlignment.x / 100F,
+                                    pivotAlignment.y / 100F
                                 )
 
                                 val startSize = previousSize ?: placeableSize

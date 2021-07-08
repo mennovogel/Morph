@@ -23,6 +23,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.focusModifier
 import androidx.compose.ui.unit.Dp
@@ -71,7 +72,8 @@ class MainActivity : AppCompatActivity() {
         SizeAnimation(
             targetState = state,
             modifier = modifier,
-            animationSpec = tween(2000),
+            contentAlignment = Alignment.Center,
+            animationSpec = tween(200),
         ) { crossFadeState ->
             when (crossFadeState) {
                 State.START -> {
