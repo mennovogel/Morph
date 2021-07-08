@@ -64,6 +64,9 @@ fun <T> SizeAnimation(
         items.removeAll { it.key != transitionState.targetState }
     }
 
+    Box(modifier = modifier.background(Color.Black)) {
+    var boxSize by remember { mutableStateOf<Size?>(null) }
+
     items.forEach { sizeAnimationItem ->
         key(sizeAnimationItem.key) {
 
@@ -85,25 +88,37 @@ fun <T> SizeAnimation(
                 val currentWidth = placeables.map { it.width }.maxOrNull() ?: 0
                 val currentHeight = placeables.map { it.height }.maxOrNull() ?: 0
 
+                if (boxSize == null || items.size == 1) {
+                    boxSize = Size(currentWidth.toFloat(), currentHeight.toFloat())
+                } else {
+                    // boxSize cannot be null here
+                    if (currentWidth.toFloat() > boxSize!!.width) {
+                        boxSize = Size(currentWidth.toFloat(), boxSize!!.height)
+                    }
+                    if (currentHeight.toFloat() > boxSize!!.height) {
+                        boxSize = Size(boxSize!!.width, currentHeight.toFloat())
+                    }
+                }
+
                 if (sizeAnimationItem.key == targetState) {
                     goToSize = Size(currentWidth.toFloat(), currentHeight.toFloat())
                 } else {
                     previousSize = Size(currentWidth.toFloat(), currentHeight.toFloat())
                 }
 
-                // Set the size of the layout as big as it can
                 layout(
                     currentWidth,
                     currentHeight
                 ) {
                     // Place children in the parent layout
                     placeables.forEach { placeable ->
-                        val currentSize = Size(placeable.width.toFloat(), placeable.height.toFloat())
+                        val currentSize =
+                            Size(placeable.width.toFloat(), placeable.height.toFloat())
 
                         // Position item on the screen
                         placeable.placeRelativeWithLayer(
-                            x = 0,
-                            y = 0,
+                            x = boxSize!!.width.toInt() - placeable.width,
+                            y = boxSize!!.height.toInt() - placeable.height,
                         ) {
                             transformOrigin = TransformOrigin(
                                 1f,
@@ -131,6 +146,7 @@ fun <T> SizeAnimation(
                 }
             }
         }
+    }
     }
 }
 

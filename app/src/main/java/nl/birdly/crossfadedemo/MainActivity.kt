@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -67,19 +68,15 @@ class MainActivity : AppCompatActivity() {
     private fun Boxes(modifier: Modifier) {
         var state by remember { mutableStateOf(State.START) }
 
-        val size: Dp by animateDpAsState(
-            targetValue = when (state) {
-                State.START -> 300.dp
-                State.END -> 100.dp
-            }
-        )
-
-        SizeAnimation(targetState = state, modifier = modifier) { crossFadeState ->
+        SizeAnimation(
+            targetState = state,
+            modifier = modifier,
+            animationSpec = tween(200),
+        ) { crossFadeState ->
             when (crossFadeState) {
                 State.START -> {
                     Box(modifier = Modifier
-                        .size(size)
-                        .animateContentSize()
+                        .size(300.dp)
                         .background(color = MaterialTheme.colors.primary)
                         .clickable {
                             state = State.END
@@ -88,8 +85,7 @@ class MainActivity : AppCompatActivity() {
                 }
                 State.END -> {
                     Box(modifier = Modifier
-                        .size(size)
-                        .animateContentSize()
+                        .size(100.dp)
                         .background(color = MaterialTheme.colors.secondary)
                         .clickable {
                             state = State.START
