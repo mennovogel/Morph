@@ -67,7 +67,7 @@ fun <T> SizeAnimation(
     }
 
     Box(modifier = modifier.background(Color.Black)) {
-        var boxSize by remember { mutableStateOf<IntSize?>(null) }
+        var boxSize by remember { mutableStateOf(IntSize(0, 0)) }
 
         items.forEach { sizeAnimationItem ->
             key(sizeAnimationItem.key) {
@@ -111,7 +111,7 @@ fun <T> SizeAnimation(
 
                             val alignment = contentAlignment.align(
                                 IntSize(placeable.width, placeable.height),
-                                boxSize!!,
+                                boxSize,
                                 layoutDirection
                             )
                             // Position item on the screen
