@@ -1,4 +1,4 @@
-package nl.birdly.crossfadedemo
+package nl.birdly.example
 
 import org.junit.Test
 

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="nl.birdly.morph"
+    package="nl.birdly.example"
     >
 
     <application
@@ -13,9 +13,9 @@
         >
 
         <activity
-            android:name="nl.birdly.crossfadedemo.MainActivity"
+            android:name=".MainActivity"
             android:label="@string/app_name"
-            android:exported="false"
+            android:exported="true"
             android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

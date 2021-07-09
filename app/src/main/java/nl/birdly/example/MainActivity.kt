@@ -1,4 +1,4 @@
-package nl.birdly.crossfadedemo
+package nl.birdly.example
 
 import android.os.Bundle
 import androidx.activity.compose.setContent

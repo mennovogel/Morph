@@ -1,4 +1,4 @@
-package nl.birdly.crossfadedemo
+package nl.birdly.example
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -24,7 +24,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import nl.birdly.morph.Morph
-import nl.birdly.morph.R
+import nl.birdly.example.R
 
 @Composable
 fun AnimatingFab(modifier: Modifier) {
