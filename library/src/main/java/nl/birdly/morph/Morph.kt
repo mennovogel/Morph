@@ -115,7 +115,7 @@ fun <T> Morph(
                         placeables.map { it.height }.maxOrNull() ?: 0
                     )
 
-                    boxSize = calculateBoxSize(boxSize, currentSize, items.size)
+                    boxSize = updateBoxSize(boxSize, currentSize, items.size)
 
                     if (sizeAnimationItem.key == targetState) {
                         targetSize = IntSize(currentSize.width, currentSize.height)
@@ -178,32 +178,43 @@ fun <T> Morph(
     }
 }
 
+/**
+ * Calculate the scale during an animation.
+ */
 private fun calculateScale(
     startSize: Float,
     endSize: Float,
-    progress: Float,
+    animationProgress: Float,
     animateToTarget: Boolean
 ): Float {
     return if (animateToTarget) {
         val startScale = startSize / endSize
-        startScale + (1F - startScale) * progress
+        startScale + (1F - startScale) * animationProgress
     } else {
         val endScale = endSize / startSize
-        endScale - (endScale - 1) * progress
+        endScale - (endScale - 1) * animationProgress
     }
 }
 
-private fun calculateBoxSize(boxSize: IntSize?, currentSize: IntSize, itemCount: Int, ): IntSize {
-    if (boxSize == null || itemCount == 1) {
-        return IntSize(currentSize.width, currentSize.height)
+/**
+ * Update the boxSize with the new size, the box size should always have the largest bounds of the
+ * child items.
+ */
+private fun updateBoxSize(
+    currentBoxSize: IntSize?,
+    itemSize: IntSize,
+    itemCount: Int
+): IntSize {
+    if (currentBoxSize == null || itemCount == 1) {
+        return IntSize(itemSize.width, itemSize.height)
     } else {
-        var mutableBoxSize = boxSize
+        var mutableBoxSize = currentBoxSize
         // boxSize cannot be null here
-        if (currentSize.width.toFloat() > boxSize.width) {
-            mutableBoxSize = IntSize(currentSize.width, boxSize.height)
+        if (itemSize.width.toFloat() > currentBoxSize.width) {
+            mutableBoxSize = IntSize(itemSize.width, currentBoxSize.height)
         }
-        if (currentSize.height.toFloat() > boxSize.height) {
-            return IntSize(mutableBoxSize.width, currentSize.height)
+        if (itemSize.height.toFloat() > currentBoxSize.height) {
+            return IntSize(mutableBoxSize.width, itemSize.height)
         }
         return mutableBoxSize
     }
