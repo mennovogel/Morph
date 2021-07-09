@@ -24,6 +24,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import nl.birdly.morph.Morph
+import nl.birdly.morph.R
 
 @Composable
 fun AnimatingFab(modifier: Modifier) {
