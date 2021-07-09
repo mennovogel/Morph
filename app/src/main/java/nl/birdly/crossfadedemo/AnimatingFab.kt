@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import nl.birdly.morph.Morph
 
 @Composable
 fun AnimatingFab(modifier: Modifier) {
@@ -39,8 +40,8 @@ fun AnimatingFab(modifier: Modifier) {
         modifier = modifier,
         targetState = state,
         contentAlignment = Alignment.BottomEnd,
-    ) { sizeState ->
-        when (sizeState) {
+    ) { morphState ->
+        when (morphState) {
             State.FAB -> {
                 FloatingActionButton(
                     elevation = FloatingActionButtonDefaults.elevation(4.dp),

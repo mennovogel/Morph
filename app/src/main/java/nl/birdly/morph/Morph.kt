@@ -1,4 +1,4 @@
-package nl.birdly.crossfadedemo
+package nl.birdly.morph
 
 import androidx.compose.animation.core.FiniteAnimationSpec
 import androidx.compose.animation.core.MutableTransitionState
