@@ -1,12 +1,10 @@
 package nl.birdly.crossfadedemo
 
-import android.util.Log
 import androidx.compose.animation.core.FiniteAnimationSpec
 import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.updateTransition
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -18,7 +16,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.Measurable
@@ -28,15 +25,16 @@ import androidx.compose.ui.unit.IntSize
 @Composable
 fun <T> SizeAnimation(
     modifier: Modifier = Modifier,
-    contentAlignment: Alignment = Alignment.TopStart,
+    contentAlignment: Alignment = Alignment.Center,
     animationSpec: FiniteAnimationSpec<Float> = spring(),
+    keepPreviousStateVisible: Boolean = false,
     targetState: T,
     content: @Composable (T) -> Unit
 ) {
-    var goToSize by remember { mutableStateOf<IntSize?>(null) }
+    var targetSize by remember { mutableStateOf<IntSize?>(null) }
     var previousSize by remember { mutableStateOf<IntSize?>(null) }
 
-    val items = remember { mutableStateListOf<SizeAnimationItem<T>>() }
+    val items = remember { mutableStateListOf<AnimationItem<T>>() }
     val transitionState = remember { MutableTransitionState(targetState) }
     val targetChanged = (targetState != transitionState.targetState)
     transitionState.targetState = targetState
@@ -53,10 +51,17 @@ fun <T> SizeAnimation(
         }
         items.clear()
         keys.mapTo(items) { key ->
-            SizeAnimationItem(key) {
-                val alpha by transition.animateFloat(
+            AnimationItem(key) {
+                val animatedAlpha by transition.animateFloat(
                     transitionSpec = { animationSpec }, label = "alpha"
                 ) { if (it == key) 1f else 0f }
+
+                val alpha = if (keepPreviousStateVisible && key != transitionState.targetState) {
+                    1f
+                } else {
+                    animatedAlpha
+                }
+
                 Box(Modifier.alpha(alpha = alpha)) {
                     content(key)
                 }
@@ -96,7 +101,7 @@ fun <T> SizeAnimation(
                     boxSize = calculateBoxSize(boxSize, currentSize, items.size)
 
                     if (sizeAnimationItem.key == targetState) {
-                        goToSize = IntSize(currentSize.width, currentSize.height)
+                        targetSize = IntSize(currentSize.width, currentSize.height)
                     } else {
                         previousSize = IntSize(currentSize.width, currentSize.height)
                     }
@@ -132,7 +137,7 @@ fun <T> SizeAnimation(
                                 )
 
                                 val startSize = previousSize ?: placeableSize
-                                val endSize = goToSize ?: placeableSize
+                                val endSize = targetSize ?: placeableSize
 
                                 scaleX = calculateScale(
                                     startSize.width.toFloat(),
@@ -187,7 +192,7 @@ private fun calculateBoxSize(boxSize: IntSize?, currentSize: IntSize, itemCount:
     }
 }
 
-private data class SizeAnimationItem<T>(
+private data class AnimationItem<T>(
     val key: T,
     val content: @Composable () -> Unit
 )
