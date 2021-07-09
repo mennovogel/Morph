@@ -22,12 +22,29 @@ import androidx.compose.ui.layout.Measurable
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.IntSize
 
+/**
+ * [Morph] allows to switch between layouts with both a crossfade and a change
+ * bounds animation.
+ *
+ * @param modifier The modifier to be applied to the layout.
+ * @param contentAlignment The default alignment inside the [Morph].
+ * @param animationSpec the AnimationSpec to configure the animation.
+ * @param keepOldStateVisible Whether to fade out the content with the old key during the
+ * animation. Setting this to true will prevent the view to transparent during the animation.
+ * Halfway the animation both layers would have 0.5F opacity, resulting in a combined opacity of
+ * 0.75F. This is false by default, because it can cause unwanted effects when changing to
+ * another shape.
+ * @param targetState - is a key representing your target layout state. Every time you change a
+ * key the animation will be triggered. The content called with the old key will be faded out while
+ * the content called with the new key will be faded in.
+ * @param content The content of the state [T] for the [Morph].
+ */
 @Composable
-fun <T> SizeAnimation(
+fun <T> Morph(
     modifier: Modifier = Modifier,
     contentAlignment: Alignment = Alignment.Center,
     animationSpec: FiniteAnimationSpec<Float> = spring(),
-    keepPreviousStateVisible: Boolean = false,
+    keepOldStateVisible: Boolean = false,
     targetState: T,
     content: @Composable (T) -> Unit
 ) {
@@ -56,7 +73,7 @@ fun <T> SizeAnimation(
                     transitionSpec = { animationSpec }, label = "alpha"
                 ) { if (it == key) 1f else 0f }
 
-                val alpha = if (keepPreviousStateVisible && key != transitionState.targetState) {
+                val alpha = if (keepOldStateVisible && key != transitionState.targetState) {
                     1f
                 } else {
                     animatedAlpha

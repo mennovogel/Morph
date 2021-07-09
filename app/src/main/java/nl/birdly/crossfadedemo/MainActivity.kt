@@ -60,11 +60,11 @@ class MainActivity : AppCompatActivity() {
     private fun Boxes(modifier: Modifier) {
         var state by remember { mutableStateOf(State.START) }
 
-        SizeAnimation(
+        Morph(
             targetState = state,
             modifier = modifier,
             contentAlignment = Alignment.Center,
-            keepPreviousStateVisible = true,
+            keepOldStateVisible = true,
         ) { crossFadeState ->
             when (crossFadeState) {
                 State.START -> {

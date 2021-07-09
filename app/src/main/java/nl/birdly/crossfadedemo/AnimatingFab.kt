@@ -35,7 +35,7 @@ fun AnimatingFab(modifier: Modifier) {
         }
     }
 
-    SizeAnimation(
+    Morph(
         modifier = modifier,
         targetState = state,
         contentAlignment = Alignment.BottomEnd,
