@@ -156,14 +156,14 @@ fun <T> Morph(
                                 val startSize = previousSize ?: placeableSize
                                 val endSize = targetSize ?: placeableSize
 
-                                scaleX = calculateScale(
+                                scaleX = ScaleCalculator.calculateScale(
                                     startSize.width.toFloat(),
                                     endSize.width.toFloat(),
                                     animationProgress,
                                     targetState == sizeAnimationItem.key
                                 )
 
-                                scaleY = calculateScale(
+                                scaleY = ScaleCalculator.calculateScale(
                                     startSize.height.toFloat(),
                                     endSize.height.toFloat(),
                                     animationProgress,
@@ -175,24 +175,6 @@ fun <T> Morph(
                 }
             }
         }
-    }
-}
-
-/**
- * Calculate the scale during an animation.
- */
-private fun calculateScale(
-    startSize: Float,
-    endSize: Float,
-    animationProgress: Float,
-    animateToTarget: Boolean
-): Float {
-    return if (animateToTarget) {
-        val startScale = startSize / endSize
-        startScale + (1F - startScale) * animationProgress
-    } else {
-        val endScale = endSize / startSize
-        endScale - (endScale - 1) * animationProgress
     }
 }
 
