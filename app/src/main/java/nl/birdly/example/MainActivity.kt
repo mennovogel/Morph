@@ -36,61 +36,6 @@ class MainActivity : AppCompatActivity() {
     // Start building your app here!
     @Composable
     fun MyApp() {
-        Surface(color = MaterialTheme.colors.background) {
-            ConstraintLayout(modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight()
-            ) {
-                val (boxes, fab) = createRefs()
-
-                Boxes(Modifier.constrainAs(boxes) {
-                    top.linkTo(parent.top)
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                    bottom.linkTo(parent.bottom)
-                })
-                AnimatingFab(Modifier.constrainAs(fab) {
-                    end.linkTo(parent.end, margin = 16.dp)
-                    bottom.linkTo(parent.bottom, margin = 16.dp)
-                })
-            }
-        }
-    }
-
-    @Composable
-    private fun Boxes(modifier: Modifier) {
-        var state by remember { mutableStateOf(State.START) }
-
-        Morph(
-            targetState = state,
-            modifier = modifier,
-            contentAlignment = Alignment.Center,
-            keepOldStateVisible = true,
-        ) { crossFadeState ->
-            when (crossFadeState) {
-                State.START -> {
-                    Box(modifier = Modifier
-                        .size(300.dp)
-                        .background(color = MaterialTheme.colors.primary)
-                        .clickable {
-                            state = State.END
-                        }
-                    )
-                }
-                State.END -> {
-                    Box(modifier = Modifier
-                        .size(100.dp)
-                        .background(color = MaterialTheme.colors.secondary)
-                        .clickable {
-                            state = State.START
-                        }
-                    )
-                }
-            }
-        }
-    }
-
-    private enum class State {
-        START, END
+        MainScreen()
     }
 }
