@@ -23,7 +23,7 @@ import nl.birdly.morph.Morph
 @Preview
 @Composable
 fun Boxes(modifier: Modifier = Modifier) {
-    var state by remember { mutableStateOf(BoxesState.START) }
+    var state by remember { mutableStateOf(BoxState.LARGE) }
 
     Morph(
         targetState = state,
@@ -32,12 +32,12 @@ fun Boxes(modifier: Modifier = Modifier) {
         keepOldStateVisible = true,
     ) { crossFadeState ->
         when (crossFadeState) {
-            BoxesState.START -> {
+            BoxState.LARGE -> {
                 Box(modifier = Modifier
                     .size(300.dp)
                     .background(color = MaterialTheme.colors.primary)
                     .clickable {
-                        state = BoxesState.END
+                        state = BoxState.SMALL
                     }
                 ) {
                     Text(
@@ -48,12 +48,12 @@ fun Boxes(modifier: Modifier = Modifier) {
                     )
                 }
             }
-            BoxesState.END -> {
+            BoxState.SMALL -> {
                 Box(modifier = Modifier
                     .size(100.dp)
                     .background(color = MaterialTheme.colors.secondary)
                     .clickable {
-                        state = BoxesState.START
+                        state = BoxState.LARGE
                     }
                 ) {
                     Text(
@@ -68,6 +68,6 @@ fun Boxes(modifier: Modifier = Modifier) {
     }
 }
 
-private enum class BoxesState {
-    START, END
+private enum class BoxState {
+    LARGE, SMALL
 }
