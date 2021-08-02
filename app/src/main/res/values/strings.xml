@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Morph demo</string>
+    <string name="hello_purple_box">Hello large\npurple box</string>
+    <string name="hey_green_box">Hey\ntiny\ngreen\nbox!</string>
 </resources>
