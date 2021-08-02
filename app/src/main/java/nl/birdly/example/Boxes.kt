@@ -12,12 +12,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import nl.birdly.morph.Morph
 
-
+@Preview
 @Composable
-fun Boxes(modifier: Modifier) {
+fun Boxes(modifier: Modifier = Modifier) {
     var state by remember { mutableStateOf(BoxesState.START) }
 
     Morph(
