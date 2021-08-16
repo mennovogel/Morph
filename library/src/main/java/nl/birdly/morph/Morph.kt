@@ -37,8 +37,9 @@ import androidx.compose.ui.unit.LayoutDirection
  * @param modifier The modifier to be applied to the layout.
  * @param contentAlignment The default alignment inside the [Morph].
  * @param animationSpec the AnimationSpec to configure the animation.
- * @param keepOldStateVisible Whether to fade out the content with the old key during the
- * animation. Setting this to true will prevent the view to transparent during the animation.
+ * @param fadePreviousState Whether to fade out the content with the old key during the
+ * animation. Setting this to false will prevent the view to become transparent during the
+ * animation.
  * Halfway the animation both layers would have 0.5F opacity, resulting in a combined opacity of
  * 0.75F. This is false by default, because it can cause unwanted effects when changing to
  * another shape.
@@ -50,7 +51,7 @@ fun <T> Morph(
     modifier: Modifier = Modifier,
     contentAlignment: Alignment = Alignment.Center,
     animationSpec: FiniteAnimationSpec<Float> = spring(),
-    keepOldStateVisible: Boolean = false,
+    fadePreviousState: Boolean = true,
     content: @Composable (T) -> Unit
 ) {
     val items = remember { mutableStateListOf<AnimationItem<T>>() }
@@ -62,7 +63,7 @@ fun <T> Morph(
     updateItems(
         items,
         targetState,
-        keepOldStateVisible,
+        fadePreviousState,
         targetChanged = targetChanged,
         transition,
         transitionState,
@@ -85,7 +86,7 @@ fun <T> Morph(
 private fun <T> updateItems(
     items: SnapshotStateList<AnimationItem<T>>,
     targetState: T,
-    keepOldStateVisible: Boolean,
+    fadePreviousState: Boolean,
     targetChanged: Boolean,
     transition: Transition<T>,
     transitionState: MutableTransitionState<T>,
@@ -108,10 +109,10 @@ private fun <T> updateItems(
                     transitionSpec = { animationSpec }, label = "alpha"
                 ) { if (it == key) 1f else 0f }
 
-                val alpha = if (keepOldStateVisible && key != transitionState.targetState) {
-                    1f
-                } else {
+                val alpha = if (fadePreviousState || key == transitionState.targetState) {
                     animatedAlpha
+                } else {
+                    1f
                 }
 
                 Box(Modifier.alpha(alpha = alpha)) {

@@ -29,7 +29,7 @@ fun Boxes(modifier: Modifier = Modifier) {
         targetState = state,
         modifier = modifier,
         contentAlignment = Alignment.Center,
-        keepOldStateVisible = true,
+        fadePreviousState = false,
     ) { crossFadeState ->
         when (crossFadeState) {
             BoxState.LARGE -> {
