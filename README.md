@@ -12,9 +12,8 @@ This library is currently supported on Android 5.0 Lollipop (21) and higher.
 
 Usage in your project:
 
-    Morph a box when it is clicked into another box.
-
 ```kotlin
+// Morph a box into another box when it is clicked.
 @Preview
 @Composable
 fun MorphingBox() {
@@ -23,6 +22,8 @@ fun MorphingBox() {
     Morph(
         targetState = boxState,
         contentAlignment = Alignment.Center,
+        // It is recommended to turn off fadePreviousState when using the same shape for all states
+        fadePreviousState = false
     ) { crossFadeState ->
         when (crossFadeState) {
             BoxState.LARGE -> {

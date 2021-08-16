@@ -38,11 +38,13 @@ import androidx.compose.ui.unit.LayoutDirection
  * @param contentAlignment The default alignment inside the [Morph].
  * @param animationSpec the AnimationSpec to configure the animation.
  * @param fadePreviousState Whether to fade out the content with the old key during the
- * animation. Setting this to false will prevent the view to become transparent during the
+ * animation. Setting this to false will prevent the view to become semi-transparent during the
  * animation.
  * Halfway the animation both layers would have 0.5F opacity, resulting in a combined opacity of
- * 0.75F. This is false by default, because it can cause unwanted effects when changing to
- * another shape.
+ * 0.75F.
+ * This is true by default, because it can cause unwanted effects when changing to
+ * different shapes. It is recommended to set this to false when animating to the same shape to
+ * prevent transparency.
  * @param content The content of the state [T] for the [Morph].
  */
 @Composable
