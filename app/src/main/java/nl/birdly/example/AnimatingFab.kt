@@ -39,8 +39,8 @@ fun AnimatingFab(modifier: Modifier = Modifier) {
     }
 
     Morph(
-        modifier = modifier,
         targetState = state,
+        modifier = modifier,
         contentAlignment = Alignment.BottomEnd,
     ) { morphState ->
         when (morphState) {
