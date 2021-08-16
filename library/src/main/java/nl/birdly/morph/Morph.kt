@@ -64,7 +64,7 @@ fun <T> Morph(
         items,
         targetState,
         fadePreviousState,
-        targetChanged = targetChanged,
+        targetChanged,
         transition,
         transitionState,
         animationSpec,
