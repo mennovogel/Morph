@@ -26,6 +26,9 @@ import androidx.compose.ui.unit.IntSize
  * [Morph] allows to switch between layouts with both a crossfade and a change
  * bounds animation.
  *
+ * @param targetState - is a key representing your target layout state. Every time you change a
+ * key the animation will be triggered. The content called with the old key will be faded out while
+ * the content called with the new key will be faded in.
  * @param modifier The modifier to be applied to the layout.
  * @param contentAlignment The default alignment inside the [Morph].
  * @param animationSpec the AnimationSpec to configure the animation.
@@ -34,18 +37,15 @@ import androidx.compose.ui.unit.IntSize
  * Halfway the animation both layers would have 0.5F opacity, resulting in a combined opacity of
  * 0.75F. This is false by default, because it can cause unwanted effects when changing to
  * another shape.
- * @param targetState - is a key representing your target layout state. Every time you change a
- * key the animation will be triggered. The content called with the old key will be faded out while
- * the content called with the new key will be faded in.
  * @param content The content of the state [T] for the [Morph].
  */
 @Composable
 fun <T> Morph(
+    targetState: T,
     modifier: Modifier = Modifier,
     contentAlignment: Alignment = Alignment.Center,
     animationSpec: FiniteAnimationSpec<Float> = spring(),
     keepOldStateVisible: Boolean = false,
-    targetState: T,
     content: @Composable (T) -> Unit
 ) {
     var targetSize by remember { mutableStateOf<IntSize?>(null) }
