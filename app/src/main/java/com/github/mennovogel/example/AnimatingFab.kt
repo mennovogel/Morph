@@ -1,4 +1,4 @@
-package nl.birdly.example
+package com.github.mennovogel.example
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -24,7 +24,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import nl.birdly.morph.Morph
+import com.github.mennovogel.morph.Morph
+import nl.birdly.example.R
 
 @Preview
 @Composable

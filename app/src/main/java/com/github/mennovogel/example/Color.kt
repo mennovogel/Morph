@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.birdly.example
+package com.github.mennovogel.example
 
 import androidx.compose.ui.graphics.Color
 

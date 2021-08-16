@@ -1,4 +1,4 @@
-package nl.birdly.example
+package com.github.mennovogel.example
 
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth

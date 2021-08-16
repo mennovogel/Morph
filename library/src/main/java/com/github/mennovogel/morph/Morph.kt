@@ -1,4 +1,4 @@
-package nl.birdly.morph
+package com.github.mennovogel.morph
 
 import androidx.compose.animation.core.FiniteAnimationSpec
 import androidx.compose.animation.core.MutableTransitionState

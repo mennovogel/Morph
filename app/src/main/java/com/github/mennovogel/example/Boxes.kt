@@ -1,4 +1,4 @@
-package nl.birdly.example
+package com.github.mennovogel.example
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -18,7 +18,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import nl.birdly.morph.Morph
+import com.github.mennovogel.morph.Morph
+import nl.birdly.example.R
 
 @Preview
 @Composable

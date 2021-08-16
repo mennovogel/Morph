@@ -1,4 +1,4 @@
-package nl.birdly.morph
+package com.github.mennovogel.morph
 
 import org.junit.Assert.assertEquals
 import org.junit.Test

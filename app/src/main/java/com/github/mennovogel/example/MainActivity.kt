@@ -1,4 +1,4 @@
-package nl.birdly.example
+package com.github.mennovogel.example
 
 import android.os.Bundle
 import androidx.activity.compose.setContent

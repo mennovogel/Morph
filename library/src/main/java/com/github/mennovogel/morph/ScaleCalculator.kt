@@ -1,4 +1,4 @@
-package nl.birdly.morph
+package com.github.mennovogel.morph
 
 internal object ScaleCalculator {
 
