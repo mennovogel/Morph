@@ -10,6 +10,21 @@ This library is currently supported on Android 5.0 Lollipop (21) and higher.
 
 ## Usage
 
+Add it to your project:
+
+```gradle
+allprojects {
+    repositories {
+        ...
+        maven { url 'https://jitpack.io' }
+    }
+}
+
+dependencies {
+    implementation 'com.github.mennovogel:morph:${morph.version}'
+}
+```
+
 Usage in your project:
 
 ```kotlin
